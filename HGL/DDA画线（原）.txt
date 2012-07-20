@@ -1,0 +1,23 @@
+	float k = float( y2 - y1 ) / float( x2 - x1 );
+	if( abs(k) < 1.0f )
+	{
+		int xinc = (x2 - x1) > 0 ? 1 : -1;		//XÖáÔöÁ¿
+		float ypos = y1;
+		for( int i = x1 + xinc; i != x2; i += xinc )
+		{
+			ypos += k * float(xinc);
+
+			hgl_DrawPixel( i, int(ypos + 0.5f), r, g, b );
+		}
+	}else
+	{
+		int yinc = (y2 - y1) > 0 ? 1 : -1;
+		float xpos = x1;
+		k = 1.0f / k;
+		for( int i = y1 + yinc; i != y2; i += yinc )
+		{
+			xpos += k * float(yinc);
+
+			hgl_DrawPixel( int(xpos + 0.5f), i, r, g, b );
+		}
+	}

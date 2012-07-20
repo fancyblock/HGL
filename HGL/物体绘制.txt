@@ -1,0 +1,50 @@
+////////////////
+//绘制一个物体//
+////////////////
+void HGL_DrawPrimitive( HGL_Primitive& primitive, HGLPrimitiveType type )
+{
+	matrix44 modelView;
+	matrix44 camera;
+
+	camera = Matrix44InverseOrtho( g_CameraMatrix );
+	modelView = Matrix44Multi( g_WorldMatrix, camera );
+
+	int i;
+	vertex3 vtx;
+
+	//顶点转换
+	for( i = 0; i < primitive.vertexCount; i++ )
+	{
+		//坐标变换
+		vtx = Vertex3MultiMatrix43( primitive.buffer[i]._position, modelView );
+		//投影变换
+		hgl_Projection( &primitive.buffer[i]._pixel._x, &primitive.buffer[i]._pixel._y, g_Perspective, vtx );
+	}
+
+	//绘制
+	hgl_BeginDraw();
+	switch( type )
+	{
+	case eHGLPrimitivePoint:			//画点
+		for( i = 0; i < primitive.vertexCount; i++ )
+		{
+			hgl_DrawPixel( primitive.buffer[i]._pixel._x, primitive.buffer[i]._pixel._y, 0, 255, 0 );
+		}
+		break;
+	case eHGLPrimitiveLine:				//画线
+		for( i = 0; i < primitive.vertexCount; i += 2 )
+		{
+			hgl_DrawLine( primitive.buffer[i]._pixel._x, primitive.buffer[i]._pixel._y,
+				primitive.buffer[i+1]._pixel._x, primitive.buffer[i+1]._pixel._y, 0, 255, 0 );
+		}
+		break;
+	case eHGLPrimitiveTriangle:			//画三角形
+		;
+		break;
+	default:
+		break;
+	}
+	hgl_EndDraw();
+
+}
+

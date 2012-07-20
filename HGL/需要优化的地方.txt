@@ -1,0 +1,7 @@
+1. hgl_DrawPixel    这个函数最后是不需要的，效率太低
+
+2. hgl_DrawLine     里面依赖了画点函数，效率太低
+
+3. 画线算法，不使用DDA而使用Bresenham
+
+4. 
